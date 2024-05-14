@@ -5,8 +5,11 @@ use PHPUnit\TextUI\XmlConfiguration\RemoveRegisterMockObjectsFromTestArgumentsRe
 use Psy\VersionUpdater\GitHubChecker;
 
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 Route::get('/', function () {
-    return view('welcome');
+    return view('front.home');
 });
 
 
@@ -25,6 +28,10 @@ Route::get('/staff/{nama}/{divisi}',function($nama, $divisi){
 Route::get('/daftar_nilai', function(){
     // return view yg mengarahkan kedalam view yang didalamnya ada folder nilai dan daftar_nilai
     return view('nilai.daftar_nilai');
+});
+
+Route::get('/dashboard', function(){
+    return view('admin.dashboard');
 });
 
 
