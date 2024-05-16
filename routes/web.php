@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Controllers\JenisProdukController;
+use App\Http\Controllers\KartuController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\TextUI\XmlConfiguration\RemoveRegisterMockObjectsFromTestArgumentsRecursivelyAttribute;
 use Psy\VersionUpdater\GitHubChecker;
+// use App\Http\Controllers\JenisProduk;
 
 
 // Route::get('/', function () {
@@ -32,6 +37,28 @@ Route::get('/daftar_nilai', function(){
 
 Route::get('/dashboard', function(){
     return view('admin.dashboard');
+});
+// prefix grouping adalah mengelompokkan routing ke satu jenis route
+Route::prefix('admin')->group(function(){
+
+// route memanggil controller setiap fungsi
+// nanti linknya menggunakan url, ada didalam view
+Route::get('/jenis_produk',[JenisProdukController::class,'index']);
+Route::post('jenis_produk/store', [JenisProdukController::class, 'store']);
+
+Route::get('/kartu',[KartuController::class,'index']);
+// Route::get('/pelanggan',[PelangganController::class,'index']);
+
+// route dengan pemanggilan class
+Route::resource('produk', ProdukController::class);
+Route::resource('pelanggan', PelangganController::class);
+
+// jenis Produk eloquen
+// Route::post('/jenis', [JenisProdukController::class, 'store'])->name('jenis.store');
+// Route::get('/jenis_produk',[JenisProdukController::class,'index'])->name('jenis.index');
+
+
+
 });
 
 
