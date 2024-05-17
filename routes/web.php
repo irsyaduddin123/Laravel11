@@ -47,10 +47,13 @@ Route::get('/jenis_produk',[JenisProdukController::class,'index']);
 Route::post('jenis_produk/store', [JenisProdukController::class, 'store']);
 
 Route::get('/kartu',[KartuController::class,'index']);
+Route::post('/kartu/store', [KartuController::class, 'store']);
 // Route::get('/pelanggan',[PelangganController::class,'index']);
 
 // route dengan pemanggilan class
 Route::resource('produk', ProdukController::class);
+
+
 Route::resource('pelanggan', PelangganController::class);
 
 // jenis Produk eloquen

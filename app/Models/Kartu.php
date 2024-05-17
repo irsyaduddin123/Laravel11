@@ -9,6 +9,7 @@ class Kartu extends Model
 {
     use HasFactory;
     protected $table = 'kartu';
+    public $timestamps = false;
     protected $fillable = [
         'kode', 'nama', 'diskon', 'iuran'];
     
