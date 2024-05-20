@@ -55,7 +55,7 @@
                                             <td>{{$p->stok}}</td>
                                             <td>{{$p->min_stok}}</td>
                                             <td>{{$p->jenis}}</td>
-                                            <td> <a href="{{Route('produk.show',$p->id)}}" class="btn btn-mdl btn-info">Detail</a></td>
+                                            <td> <a href="{{Route('produk.show',$p->id)}}" class="btn btn-mdl btn-info"><i class="fa-solid fa-eye"></i></a></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

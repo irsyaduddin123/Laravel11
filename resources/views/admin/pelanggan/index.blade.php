@@ -30,6 +30,7 @@
                         <th>Tanggal Lahir </th>
                         <th>Email </th>
                         <th>Kartu </th>
+                        <th>actiom</th>
                 </thead>
                 <tfoot>
                     <tr>
@@ -41,6 +42,8 @@
                         <th>Tanggal Lahir </th>
                         <th>Email </th>
                         <th>Kartu </th>
+                        <th>Action</th>
+                        
                         
                 </tfoot>
                 <tbody>
@@ -55,6 +58,8 @@
                         <td>{{$p->email}}</td>
                         {{-- <td>{{$p->nama}}</td> --}}
                         <td>{{$p->kartu->nama}}</td> 
+                        <td> <a href="{{Route('pelanggan.show',$p->id)}}" class="btn btn-mdl btn-info"><i class="fa-solid fa-eye"></i></a></td>
+
 
                         
                     </tr>

@@ -54,7 +54,10 @@ class PelangganController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // shwo elequent
+        $pelanggan = Pelanggan::findOrFail($id);
+        // dd($pelanggan); data dummy
+        return view('admin.pelanggan.detail', compact('pelanggan'));
     }
 
     /**
