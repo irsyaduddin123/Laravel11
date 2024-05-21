@@ -37,6 +37,16 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+        // Proses upload foto
+        // jika foto ada yang terupload
+        if(!empty($request->foto)){
+            // buat nama file baru
+            $fileNama = 'foto'.uniqid().'.'.$request->foto->extension();
+            // simpan file ke folder public
+            $request->foto->move(public_path('admin/images'), $fileNama);
+            }else{
+                $fileNama = '';
+        }
         // tambah data produk dari create
         DB::table('produk')->insert([
             'kode' =>$request->kode,
@@ -45,6 +55,8 @@ class ProdukController extends Controller
             'harga_beli' => $request->harga_beli,
             'stok' => $request->stok,
             'min_stok' => $request->min_stok,
+            'deskripsi' => $request->deskripsi,
+            'foto' => $fileNama,
             'jenis_produk_id' => $request->jenis_produk_id,
         ]);
         return redirect('admin/produk');
@@ -68,7 +80,11 @@ class ProdukController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //jenis_produk 
+        $jenis_produk = DB::table('jenis_produk')->get();
+        //produk
+        $produk = DB::table('produk')->where('id',$id)->get();
+        return view ('admin.produk.edit', compact('jenis_produk','produk'));
     }
 
     /**
@@ -76,7 +92,71 @@ class ProdukController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // //Foto lama
+        // $fotoLama = DB::table('produk')->select('foto')->where('id',$id)->get();
+        // foreach($fotoLama as $f1){
+        //     $fotoLama = $f1->foto;
+        // }
+        // // jika foto sudah terupload maka tergantikan
+        // if (!empty($request->foto)) {
+        //     if (!empty($fotoLama->foto)) unlink(public_path('admin/images/'.$fotoLama->foto));
+        //     $fileNama = 'foto'.$request->$id.'.'.$request->foto->extension();
+
+        //     $request->foto->move(public_path('admin/images'), $fileNama);
+        // }else{
+        //     $fileNama = $fotoLama;
+        // }
+        
+        // DB::table('produk')->where('id',$id)->update([
+        //     'kode' =>$request->kode,
+        //     'nama' => $request->nama,
+        //     'harga_jual' => $request->harga_jual,
+        //     'harga_beli' => $request->harga_beli,
+        //     'stok' => $request->stok,
+        //     'min_stok' => $request->min_stok,
+        //     'deskripsi' => $request->deskripsi,
+        //     'foto' => $fileNama,
+        //     'jenis_produk_id' => $request->jenis_produk_id,
+        // ]);
+        // return redirect('admin/produk');
+
+        // Code ubahan
+        // Mengambil foto lama
+        $produk = DB::table('produk')->select('foto')->where('id', $id)->first();
+        $fotoLama = $produk ? $produk->foto : null;
+
+        // Mengunggah dan mengganti foto jika ada file baru yang diunggah
+        if ($request->hasFile('foto')) {
+            // Menghapus foto lama jika ada
+            if ($fotoLama && file_exists(public_path('admin/images/' . $fotoLama))) {
+                unlink(public_path('admin/images/' . $fotoLama));
+            }
+
+            // Membuat nama file baru yang unik
+            $fileNama = 'foto' . uniqid() . '.' . $request->foto->extension();
+
+            // Memindahkan file ke direktori yang ditentukan
+            $request->foto->move(public_path('admin/images'), $fileNama);
+        } else {
+            // Jika tidak ada file baru, tetap gunakan foto lama
+            $fileNama = $fotoLama;
+        }
+
+        // Memperbarui data produk
+        DB::table('produk')->where('id', $id)->update([
+            'kode' => $request->kode,
+            'nama' => $request->nama,
+            'harga_jual' => $request->harga_jual,
+            'harga_beli' => $request->harga_beli,
+            'stok' => $request->stok,
+            'min_stok' => $request->min_stok,
+            'deskripsi' => $request->deskripsi,
+            'foto' => $fileNama,
+            'jenis_produk_id' => $request->jenis_produk_id,
+        ]);
+
+        return redirect('admin/produk');
+        // ->with('success', 'Produk berhasil diperbarui.')
     }
 
     /**

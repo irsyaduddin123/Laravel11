@@ -58,7 +58,8 @@
                         <td>{{$p->email}}</td>
                         {{-- <td>{{$p->nama}}</td> --}}
                         <td>{{$p->kartu->nama}}</td> 
-                        <td> <a href="{{Route('pelanggan.show',$p->id)}}" class="btn btn-mdl btn-info"><i class="fa-solid fa-eye"></i></a></td>
+                        <td> <a href="{{Route('pelanggan.show',$p->id)}}" class="btn btn-mdl btn-info"><i class="fa-solid fa-eye"></i></a>
+                            <a href="{{Route('pelanggan.edit',$p->id)}}" class="btn btn-mdl btn-warning"><i class="fa-solid fa-pen-to-square"></i></a></td>
 
 
                         
