@@ -121,18 +121,17 @@ class PelangganController extends Controller
 
         // Jika ada file foto baru yang diunggah
         if ($request->hasFile('foto')) {
-            // Menghapus foto lama jika ada
+            // Menghapus foto lama 
             if ($fotoLama && file_exists(public_path('admin/images/' . $fotoLama))) {
                 unlink(public_path('admin/images/' . $fotoLama));
             }
 
-            // Membuat nama file baru yang unik
+            
             $fileName = 'foto-' . $id . '.' . $request->foto->extension();
 
-            // Memindahkan file ke direktori yang ditentukan
             $request->foto->move(public_path('admin/images'), $fileName);
         } else {
-            // Jika tidak ada file baru, tetap gunakan foto lama
+
             $fileName = $fotoLama;
         }
 
@@ -157,5 +156,12 @@ class PelangganController extends Controller
     public function destroy(string $id)
     {
         //
+        $pelanggan = Pelanggan::find($id);
+        $fotoLama = $pelanggan ? $pelanggan->foto : null;
+        if ($fotoLama && file_exists(public_path('admin/images/' . $fotoLama))) {
+            unlink(public_path('admin/images/' . $fotoLama));
+            }
+        $pelanggan->delete();
+        return redirect('admin/pelanggan');
     }
 }

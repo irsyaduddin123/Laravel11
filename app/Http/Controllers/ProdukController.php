@@ -17,9 +17,9 @@ class ProdukController extends Controller
     {
         //
         $produk = Produk::join('jenis_produk', 'jenis_produk_id', '=', 'jenis_produk.id')
-        ->select('produk.*', 'jenis_produk.nama as jenis')
-        ->get();
-        return view ('admin.produk.index', compact('produk'));
+            ->select('produk.*', 'jenis_produk.nama as jenis')
+            ->get();
+        return view('admin.produk.index', compact('produk'));
     }
 
     /**
@@ -29,7 +29,7 @@ class ProdukController extends Controller
     {
         //
         $jenis_produk = DB::table('jenis_produk')->get();
-        return view ('admin.produk.create', compact('jenis_produk'));
+        return view('admin.produk.create', compact('jenis_produk'));
     }
 
     /**
@@ -37,19 +37,49 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+
+        // Validasi data input
+        
+        $request->validate([
+            'kode' => 'required|string|max:10|unique:produk,kode',
+            'nama' => 'required|string|max:45',
+            'harga_jual' => 'required|numeric|min:0',
+            'harga_beli' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'min_stok' => 'required|integer|min:0',
+            // 'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'jenis_produk_id' => 'required|exists:jenis_produk,id',
+        ], [
+            'kode.max' => 'Kode maksimal 10 karakter',
+            'kode.required' => 'Kode produk wajib diisi.',
+            'kode.unique' => 'Kode produk sudah ada.',
+            'nama.required' => 'Nama produk wajib diisi.',
+            'nama.max' => 'Nama produk maksimal 45 karakter.',
+            'harga_jual.required' => 'Harga jual wajib diisi.',
+            'harga_jual.min' => 'Harga jual minimal 0.',
+            'harga_beli.required' => 'Harga beli wajib diisi.',
+            'stok.required' => 'Stok wajib diisi.',
+            'min_stok.required' => 'Minimal stok wajib diisi.',
+            'foto.image' => 'File foto harus berupa gambar.',
+            'foto.mimes' => 'File foto harus berupa extensi jpeg,png,jpg,gif,svg.',
+            'foto.max' => 'File foto maksimal 2 MB.',
+            // 'jenis_produk_id.required' => 'Jenis produk wajib diisi.',
+            // 'jenis_produk_id.exists' => 'Jenis produk tidak valid.'
+        ]);
         // Proses upload foto
         // jika foto ada yang terupload
-        if(!empty($request->foto)){
+        if (!empty($request->foto)) {
             // buat nama file baru
-            $fileNama = 'foto'.uniqid().'.'.$request->foto->extension();
+            $fileNama = 'foto' . uniqid() . '.' . $request->foto->extension();
             // simpan file ke folder public
             $request->foto->move(public_path('admin/images'), $fileNama);
-            }else{
-                $fileNama = '';
+        } else {
+            $fileNama = '';
         }
         // tambah data produk dari create
         DB::table('produk')->insert([
-            'kode' =>$request->kode,
+            'kode' => $request->kode,
             'nama' => $request->nama,
             'harga_jual' => $request->harga_jual,
             'harga_beli' => $request->harga_beli,
@@ -69,10 +99,10 @@ class ProdukController extends Controller
     {
         //
         $produk = Produk::join('jenis_produk', 'jenis_produk_id', '=', 'jenis_produk.id')
-        ->select('produk.*', 'jenis_produk.nama as jenis')
-        ->where('produk.id', $id)
-        ->get();
-        return view ('admin.produk.detail', compact('produk'));
+            ->select('produk.*', 'jenis_produk.nama as jenis')
+            ->where('produk.id', $id)
+            ->get();
+        return view('admin.produk.detail', compact('produk'));
     }
 
     /**
@@ -83,8 +113,8 @@ class ProdukController extends Controller
         //jenis_produk 
         $jenis_produk = DB::table('jenis_produk')->get();
         //produk
-        $produk = DB::table('produk')->where('id',$id)->get();
-        return view ('admin.produk.edit', compact('jenis_produk','produk'));
+        $produk = DB::table('produk')->where('id', $id)->get();
+        return view('admin.produk.edit', compact('jenis_produk', 'produk'));
     }
 
     /**
@@ -106,7 +136,7 @@ class ProdukController extends Controller
         // }else{
         //     $fileNama = $fotoLama;
         // }
-        
+
         // DB::table('produk')->where('id',$id)->update([
         //     'kode' =>$request->kode,
         //     'nama' => $request->nama,
@@ -165,5 +195,7 @@ class ProdukController extends Controller
     public function destroy(string $id)
     {
         //
+        DB::table('produk')->where('id', $id)->delete();
+        return redirect('admin/produk');
     }
 }
