@@ -4,6 +4,7 @@ use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\KartuController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\TextUI\XmlConfiguration\RemoveRegisterMockObjectsFromTestArgumentsRecursivelyAttribute;
 use Psy\VersionUpdater\GitHubChecker;
@@ -40,6 +41,7 @@ Route::get('/dashboard', function(){
 });
 // prefix grouping adalah mengelompokkan routing ke satu jenis route
 Route::prefix('admin')->group(function(){
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');  //menggunakan nama
 
 // route memanggil controller setiap fungsi
 // nanti linknya menggunakan url, ada didalam view
