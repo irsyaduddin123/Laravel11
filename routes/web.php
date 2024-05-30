@@ -5,6 +5,7 @@ use App\Http\Controllers\KartuController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\TextUI\XmlConfiguration\RemoveRegisterMockObjectsFromTestArgumentsRecursivelyAttribute;
 use Psy\VersionUpdater\GitHubChecker;
@@ -43,11 +44,14 @@ Route::get('/dashboard', function () {
 // prefix grouping adalah mengelompokkan routing ke satu jenis route
 
 // pembatas middleware pembatas atau validasi antara visitor
-Route::group(['middleware' => ['auth', 'role:admin|manager|staff']], function () {
+Route::group(['middleware' => ['auth','checkActive', 'role:admin|manager|staff']], function () {
 
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');  //menggunakan nama
+        Route::get('/user', [UserController::class, 'index']);
+        Route::post('/user/{user}/activate', [UserController::class, 'activate'])->name('admin.user.activate');
+        Route::get('/profile', [UserController::class, 'showProfile']);
 
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');  //menggunakan nama
         // route memanggil controller setiap fungsi
         // nanti linknya menggunakan url, ada didalam view
         Route::get('/jenis_produk', [JenisProdukController::class, 'index']);
