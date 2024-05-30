@@ -1,6 +1,11 @@
 @extends('admin.layouts.app')
 @section('konten')
 
+{{-- @if ( Auth::user()->role =='admin') --}}
+{{-- @if ( Auth::user()->role =='manager') || ( Auth::user()->role =='staff')--}}
+
+@if(Auth::user()->role != 'manager' && Auth::user()->role != 'staff')
+
 <div class="modal fade" id="tambah" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -115,5 +120,11 @@
         </div>
     </div>
 </div>
+
+@else
+@php
+    abort(403, 'FORBIDDEN');
+@endphp
+@endif
     
 @endsection

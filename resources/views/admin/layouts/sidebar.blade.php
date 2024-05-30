@@ -21,8 +21,11 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{ url('admin/jenis_produk') }}">Jenis Produk</a>
                             <a class="nav-link" href="{{ route('produk.index') }}">Produk</a>
+                            {{-- supaya tidak bisa melihat ini tp hanya untuk mengatasi front end nya  --}}
+                            @if ( Auth::user()->role =='admin')
                             <a class="nav-link" href="{{ url('admin/kartu') }}">Kartu</a>
                             <a class="nav-link" href="{{ url('admin/pelanggan') }}">Pelanggan</a>
+                            @endif
                         </nav>
                     </div>
                     {{-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"

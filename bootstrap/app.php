@@ -13,7 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         // RealRashid\SweetAlert\SweetAlertServiceProvider::class;
-        \RealRashid\SweetAlert\ToSweetAlert::class;
+        // \RealRashid\SweetAlert\ToSweetAlert::class;
+        $middleware->web([
+            \RealRashid\SweetAlert\ToSweetAlert::class,
+        ]);
+        $middleware->alias([
+            'Alert' => \RealRashid\SweetAlert\Facades\Alert::class,
+            'role' => App\Http\Middleware\Role::class,
+        ]);
 
     })
     ->withExceptions(function (Exceptions $exceptions) {
